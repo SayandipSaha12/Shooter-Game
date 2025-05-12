@@ -11,9 +11,11 @@ Command your sleek cone-shaped vessel through a celestial battlefield filled wit
 - **Dynamic Health System**: Begin your mission with 100 HP shield capacity. Each impact with an enemy orb depletes 20 HP from your shields.
 - **Score Progression**: Demonstrate your sharpshooting skills! Each destroyed enemy orb awards 10 points to your combat record.
 - **Intuitive Controls**:
+  
   - **←→** Arrow keys for nimble vessel navigation
   - **SPACEBAR** to unleash devastating laser beams
   - **R** key to initiate mission restart after shield failure
+    
 - **Adaptive Challenge**: Enemy orbs materialize from random coordinates, creating unique combat scenarios with each playthrough.
 
 ## 🛠️ DEPLOYMENT REQUIREMENTS
