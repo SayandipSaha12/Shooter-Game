@@ -1,4 +1,4 @@
-# 2D Space Shooter: Cosmic Defender
+# 🎮 2D Space Shooter: Cosmic Defender
 
 **A thrilling arcade experience built with Python & Pygame**
 
