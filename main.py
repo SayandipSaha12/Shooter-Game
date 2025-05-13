@@ -18,12 +18,17 @@ pygame.display.set_caption("Shooter Game")
 
 font = pygame.font.SysFont(None, 36)
 
+def load_transform_image(filepath:str, angle:float = 0, scl:float = 1, smoothscale:bool = False) -> pygame.Surface:
+    img = pygame.image.load(filepath)
+    img = pygame.transform.rotate(img, angle)
+    img = pygame.transform.smoothscale_by(img, scl) if smoothscale else pygame.transform.scale_by(img, scl)
+    return img
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface((30, 40), pygame.SRCALPHA)
-        pygame.draw.polygon(self.image, BLUE, [(15, 0), (0, 40), (30, 40)])
+        self.image = load_transform_image("Art/ship.png", 90, 0.65)
         self.rect = self.image.get_rect()
         self.rect.centerx = SCREEN_WIDTH // 2
         self.rect.bottom = SCREEN_HEIGHT - 10
@@ -47,8 +52,7 @@ class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.size = random.randint(20, 40)
-        self.image = pygame.Surface((self.size, self.size), pygame.SRCALPHA)
-        pygame.draw.circle(self.image, RED, (self.size // 2, self.size // 2), self.size // 2)
+        self.image = load_transform_image("Art/enemy.png", -90, 1)
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0, SCREEN_WIDTH - self.size)
         self.rect.y = random.randint(-100, -40)
@@ -68,8 +72,7 @@ class Enemy(pygame.sprite.Sprite):
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        self.image = pygame.Surface((5, 10))
-        self.image.fill(GREEN)
+        self.image = load_transform_image("Art/missile.png", 90, 0.6)
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.bottom = y
@@ -88,10 +91,17 @@ bullets = pygame.sprite.Group()
 player = Player()
 all_sprites.add(player)
 
-for _ in range(8):
+# Enemy creation
+def create_enemy():
     enemy = Enemy()
     all_sprites.add(enemy)
     enemies.add(enemy)
+
+def create_enemies(count:int):
+    for _ in range(count):
+        create_enemy()
+
+create_enemies(8)
 
 score = 0
 game_over = False
@@ -117,10 +127,7 @@ while running:
                 for sprite in all_sprites:
                     if isinstance(sprite, Enemy) or isinstance(sprite, Bullet):
                         sprite.kill()
-                for _ in range(8):
-                    enemy = Enemy()
-                    all_sprites.add(enemy)
-                    enemies.add(enemy)
+                create_enemies(8)
 
     if not game_over:
         all_sprites.update()
@@ -128,16 +135,12 @@ while running:
         hits = pygame.sprite.groupcollide(bullets, enemies, True, True)
         for _ in hits:
             score += 10
-            enemy = Enemy()
-            all_sprites.add(enemy)
-            enemies.add(enemy)
+            create_enemy()
 
         hits = pygame.sprite.spritecollide(player, enemies, True)
         for _ in hits:
             player.health -= 20
-            enemy = Enemy()
-            all_sprites.add(enemy)
-            enemies.add(enemy)
+            create_enemy()
             if player.health <= 0:
                 game_over = True
 
